@@ -10,7 +10,7 @@
 
 void setup() {
   // Initialize Serial port
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   while (!Serial) continue;
 
   // Allocate the JSON document

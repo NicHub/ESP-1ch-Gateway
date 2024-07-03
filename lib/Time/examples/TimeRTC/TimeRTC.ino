@@ -1,7 +1,7 @@
 /*
  * TimeRTC.pde
  * example code illustrating Time library with Real Time Clock.
- * 
+ *
  */
 
 #include <TimeLib.h>
@@ -9,13 +9,13 @@
 #include <DS1307RTC.h>  // a basic DS1307 library that returns time as a time_t
 
 void setup()  {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   while (!Serial) ; // wait until Arduino Serial Monitor opens
   setSyncProvider(RTC.get);   // the function to get the time from the RTC
-  if(timeStatus()!= timeSet) 
+  if(timeStatus()!= timeSet)
      Serial.println("Unable to sync with the RTC");
   else
-     Serial.println("RTC has set the system time");      
+     Serial.println("RTC has set the system time");
 }
 
 void loop()
@@ -41,8 +41,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits){

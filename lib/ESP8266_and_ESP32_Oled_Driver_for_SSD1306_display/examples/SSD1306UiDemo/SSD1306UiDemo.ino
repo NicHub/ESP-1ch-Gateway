@@ -144,7 +144,7 @@ OverlayCallback overlays[] = { msOverlay };
 int overlaysCount = 1;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   Serial.println();
   Serial.println();
 

@@ -31,8 +31,8 @@ void configModeCallback (WiFiManager *myWiFiManager) {
 void setup() {
   WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // put your setup code here, to run once:
-  Serial.begin(115200);
-  
+  Serial.begin(BAUD_RATE);
+
   //set led pin as output
   pinMode(LED, OUTPUT);
   // start ticker with 0.5 because we start in AP mode and try to connect

@@ -78,7 +78,7 @@ void setupSpiffs(){
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   Serial.println();
 
   setupSpiffs();
@@ -90,7 +90,7 @@ void setup() {
   wm.setSaveConfigCallback(saveConfigCallback);
 
   // setup custom parameters
-  // 
+  //
   // The extra parameters to be configured (can be either global or just in the setup)
   // After connecting, parameter.getValue() will get you the configured value
   // id/name placeholder/prompt default length

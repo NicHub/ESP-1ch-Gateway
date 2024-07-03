@@ -11,16 +11,16 @@
 //
 // NO WARRANTY OF ANY KIND IS PROVIDED
 //
-// The protocols and specifications used for this 1ch gateway: 
+// The protocols and specifications used for this 1ch gateway:
 // 1. LoRA Specification version V1.0 and V1.1 for Gateway-Node communication
-//	
+//
 // 2. Semtech Basic communication protocol between Lora gateway and server version 3.0.0
 //	https://github.com/Lora-net/packet_forwarder/blob/master/PROTOCOL.TXT
 //
-// Notes: 
+// Notes:
 // - Once call hostbyname() to get IP for services, after that only use IP
 //	 addresses (too many gethost name makes the ESP unstable)
-// - Only call yield() in main stream (not for background NTP sync). 
+// - Only call yield() in main stream (not for background NTP sync).
 //
 // ----------------------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ extern "C" {
 #		include <ESP8266httpUpdate.h>
 #		include <ArduinoOTA.h>
 #	endif //_OTA
-					
+
 
 #else
 #	error "Architecture not supported"
@@ -157,7 +157,7 @@ uint8_t		currentMode = 0x81;
 uint8_t protocol	= _PROTOCOL;
 
 // Set spreading factor (SF7 - SF12)
-sf_t sf 			= _SPREADING;							// Initial value of SF					
+sf_t sf 			= _SPREADING;							// Initial value of SF
 
 // Set location, description and other configuration parameters
 // Defined in ESP-sc_gway.h
@@ -167,11 +167,11 @@ float lon			= _LON;
 int   alt			= _ALT;
 char platform[24]	= _PLATFORM; 							// platform definition
 char email[40]		= _EMAIL;    							// used for contact email
-char description[64]= _DESCRIPTION;							// used for free form description 
+char description[64]= _DESCRIPTION;							// used for free form description
 
 // JSON definitions
 StaticJsonDocument<312> jsonBuffer;							// Use of arduinoJson version 6!
-	
+
 // define servers
 
 IPAddress ntpServer;										// IP address of NTP_TIMESERVER
@@ -180,7 +180,7 @@ IPAddress thingServer;										// Only if we use a second (backup) server
 
 WiFiUDP Udp;
 
-time_t startTime = 0;										// The time in seconds since 1970 that the server started. 
+time_t startTime = 0;										// The time in seconds since 1970 that the server started.
 uint32_t eventTime = 0;										// Timing of _event to change value (or not).
 uint32_t sendTime = 0;										// Time that the last message transmitted
 uint32_t doneTime = 0;										// Time to expire when CDDONE takes too long
@@ -215,7 +215,7 @@ uint16_t iSens=0;
 
 // volatile bool inSPI This initial value of mutex is to be free,
 // which means that its value is 1 (!)
-// 
+//
 int16_t mutexSPI = 1;
 
 uint8_t buff[64]; 											// Buffer to use for sx1276, set to 64 characters
@@ -229,8 +229,8 @@ unsigned int remotePortNo;
 // ----------------------------------------------------------------------------
 // FORWARD DECLARATIONS
 // These forward declarations are done since other .ino fils are linked by the
-// compiler/linker AFTER the main ESP-sc-gway.ino file. 
-// And espcecially when calling functions with ICACHE_RAM_ATTR the complier 
+// compiler/linker AFTER the main ESP-sc-gway.ino file.
+// And espcecially when calling functions with ICACHE_RAM_ATTR the complier
 // does not want this.
 // Solution can also be to specify less STRICT compile options in Makefile
 // ----------------------------------------------------------------------------
@@ -301,7 +301,7 @@ void setup() {
 
 	initDown(&LoraDown);
 	initConfig(&gwayConfig);
-		
+
 #	if _DUSB>=1
 		Serial.begin(_BAUDRATE);							// As fast as possible for bus
 		delay(500);
@@ -314,7 +314,7 @@ void setup() {
 
 #	if _GPS==1
 		// Pins are defined in LoRaModem.h together with other pins
-		sGps.begin(9600, SERIAL_8N1, GPS_TX, GPS_RX);		// PIN 12-TX 15-RX
+		sGps.begin(BAUD_RATE, SERIAL_8N1, GPS_TX, GPS_RX);		// PIN 12-TX 15-RX
 #	endif //_GPS
 
 	delay(500);
@@ -335,8 +335,8 @@ void setup() {
 		delay(500);
 		initConfig(&gwayConfig);							// After a format reinit variables
 	}
-	
-	// If we set SPIFFS_FORMAT in 
+
+	// If we set SPIFFS_FORMAT in
 #	if _SPIFFS_FORMAT>=1
 	msg_oLED("FORMAT");
 	SPIFFS.format();										// Normally disabled. Enable only when SPIFFS corrupt
@@ -351,7 +351,7 @@ void setup() {
 #	if _MONITOR>=1
 		msg_oLED("MONITOR");
 		initMonitor(monitor);
-		
+
 #		if defined CFG_noassert
 			mPrint("No Asserts");
 #		else
@@ -360,7 +360,7 @@ void setup() {
 #	endif //_MONITOR
 
 	delay(500);
-	
+
 	// Read the config file for all parameters not set in the setup() or configGway.h file
 	// This file should be read just after SPIFFS is initializen and before
 	// other configuration parameters are used.
@@ -378,8 +378,8 @@ void setup() {
 		if (debug>=0) {
 			mPrint("setup:: readGwayCfg: ERROR readGwayCfg Failed");
 		}
-#		endif	
-	};							
+#		endif
+	};
 	delay(500);
 
 #	if _WIFIMANAGER==1
@@ -388,7 +388,7 @@ void setup() {
 			mPrint(F("setup:: WiFiManager"));
 #		endif //_MONITOR
 		delay(500);
-	
+
 		wifiMgr();
 #	endif //_WIFIMANAGER
 
@@ -420,7 +420,7 @@ void setup() {
 		mPrint("setup:: WlanConnect="+String(WiFi.SSID()) );
 	}
 #	endif
-	
+
 	// After there is a WiFi router connection, we set the hostname with last 3 bytes of MAC address.
 #	if defined(ESP32_ARCH)
 		// ESP32
@@ -443,14 +443,14 @@ void setup() {
 #		endif //ESP32_ARCH
 
 		response += " WiFi Connected to " + String(WiFi.SSID());
-		response += " on IP=" + String(WiFi.localIP().toString() );
+		response += " \nhttp://" + String(WiFi.localIP().toString() );
 		mPrint(response);
-	} 
+	}
 #	endif //_MONITOR
 
 	delay(500);
 	// If we are here we are connected to WLAN
-	
+
 #	if _UDPROUTER==1
 		// So now test the UDP function
 		if (!connectUdp()) {
@@ -467,11 +467,11 @@ void setup() {
 #	else
 #		if _MONITOR>=1
 			mPrint("Setup:: ERROR, No Router Connection defined");
-#		endif //_MONITOR	
+#		endif //_MONITOR
 #	endif //_UDPROUTER
 
 	delay(200);
-	
+
 	// Pins are defined and set in loraModem.h
     pinMode(pins.ss, OUTPUT);
 	pinMode(pins.rst, OUTPUT);
@@ -490,7 +490,7 @@ void setup() {
 	SPI.beginTransaction(settings);
 
 	delay(500);
-	
+
 	// We choose the Gateway ID to be the Ethernet Address of our Gateway card
     // display results of getting hardware address
 	//
@@ -527,11 +527,11 @@ void setup() {
 	// As long as the time has not been set we try to set the time.
 #	if _NTP_INTR==1
 		setupTime();											// Set NTP time host and interval
-		
+
 #	else //_NTP_INTR
 	{
 		// If not using the standard libraries, do manual setting
-		// of the time. This method works more reliable than the 
+		// of the time. This method works more reliable than the
 		// interrupt driven method.
 		String response = ".";
 		while (timeStatus() == timeNotSet) {					// time still 1/1/1970 and 0:00 hrs
@@ -553,7 +553,7 @@ void setup() {
 			delay(1000);
 			setTime(newTime);
 		}
-		
+
 		// When we are here we succeeded in getting the time
 		startTime = now();										// Time in seconds
 #		if _MONITOR>=1
@@ -576,7 +576,7 @@ void setup() {
 
 #else
 
-	// ---------- TTNSERVER or THINGSERVER -------------------------------	
+	// ---------- TTNSERVER or THINGSERVER -------------------------------
 #	ifdef _TTNSERVER
 		ttnServer = resolveHost(_TTNSERVER, 10);			// Use DNS to get server IP
 		if (ttnServer.toString() == "0:0:0:0") {			// Experimental
@@ -587,7 +587,7 @@ void setup() {
 #			endif
 			delay(10000);									// Delay 10 seconds
 			ttnServer = resolveHost(_TTNSERVER, 10);
-		}	
+		}
 		delay(100);
 #	endif //_TTNSERVER
 
@@ -601,35 +601,35 @@ void setup() {
 	// The Over the Air updates are supported when we have a WiFi connection.
 	// The NTP time setting does not have to be precise for this function to work.
 #if _OTA==1
-	setupOta(hostname);										// Uses wwwServer 
+	setupOta(hostname);										// Uses wwwServer
 #endif //_OTA
 
 	readSeen(_SEENFILE, listSeen);							// read the seenFile records
 
-#if _SERVER==1	
+#if _SERVER==1
 	// Setup the webserver
 	setupWWW();
 #endif //_SERVER
 
 	delay(100);												// Wait after setup
-	
+
 	// Setup and initialise LoRa state machine of _loraModem.ino
 	_state = S_INIT;
 	initLoraModem();
-	
+
 	if (gwayConfig.cad) {
 		_state = S_SCAN;
 		sf = SF7;
 		cadScanner();										// Always start at SF7
 	}
-	else { 
+	else {
 		_state = S_RX;
 		rxLoraModem();
 	}
 	LoraUp.payLoad[0]= 0;
 	LoraUp.size = 0;										// Init the length to 0
 
-	// init interrupt handlers, which are shared for GPIO15 == D8, 
+	// init interrupt handlers, which are shared for GPIO15 == D8,
 	// we switch on HIGH interrupts
 	if (pins.dio0 == pins.dio1) {
 		attachInterrupt(pins.dio0, Interrupt_0, RISING);	// Share interrupts
@@ -638,7 +638,7 @@ void setup() {
 	else {
 		attachInterrupt(pins.dio0, Interrupt_0, RISING);	// Separate interrupts
 		attachInterrupt(pins.dio1, Interrupt_1, RISING);	// Separate interrupts
-		//attachInterrupt(pins.dio2, Interrupt_2, RISING);	// Separate interrupts		
+		//attachInterrupt(pins.dio2, Interrupt_2, RISING);	// Separate interrupts
 	}
 
 	writeConfig(_CONFIGFILE, &gwayConfig);					// Write config
@@ -667,13 +667,13 @@ void setup() {
 // ----------------------------------------------------------------------------
 // LOOP
 // This is the main program that is executed time and time again.
-// We need to give way to the backend WiFi processing that 
+// We need to give way to the backend WiFi processing that
 // takes place somewhere in the ESP8266 firmware and therefore
 // we include yield() statements at important points.
 //
 // Note: If we spend too much time in user processing functions
 // and the backend system cannot do its housekeeping, the watchdog
-// function will be executed which means effectively that the 
+// function will be executed which means effectively that the
 // program crashes.
 // We use yield() to avoid ANY watch dog activity of the program.
 //
@@ -683,7 +683,7 @@ void loop ()
 {
 	int packetSize;
 	uint32_t nowSeconds = now();
-	
+
 	// If we are not connected, try to connect.
 	// We will not read Udp in this loop cycle if not connected to Wlan
 	if (WlanConnect(1) < 0) {
@@ -698,7 +698,7 @@ void loop ()
 
 	yield();												// 200403 to make sure UDP buf filled
 
-	// So if we are connected 
+	// So if we are connected
 	// Receive UDP PUSH_ACK messages from server. (*2, par. 3.3)
 	// This is important since the TTN broker will return confirmation
 	// messages on UDP for every message sent by the gateway. So we have to consume them.
@@ -740,15 +740,15 @@ void loop ()
 	// in userspace in loop().
 	//
 	stateMachine();											// do the state machine
-	
+
 	// After a quiet period, make sure we reinit the modem and state machine.
 	// The interval is in seconds (about 15 seconds) as this re-init
-	// is a heavy operation. 
+	// is a heavy operation.
 	// So it will kick in if there are not many messages for the gateway.
 	// Note: Be careful that it does not happen too often in normal operation.
 	//
 	if ( ((nowSeconds - statr[0].time) > _MSG_INTERVAL) &&
-		(msgTime <= statr[0].time) ) 
+		(msgTime <= statr[0].time) )
 	{
 #		if _MONITOR>=1
 		if ((debug>=2) && (pdebug & P_MAIN)) {
@@ -787,7 +787,7 @@ void loop ()
 
 	// If event is set, we know that we have a (soft) interrupt.
 	// After all necessary web/OTA services are scanned, we will
-	// reloop here for timing purposes. 
+	// reloop here for timing purposes.
 	// v as less yield() as possible.
 	if (_event == 1) {
 		return;
@@ -795,7 +795,7 @@ void loop ()
 	else yield();
 
 #	if _SERVER==1
-	// Handle the Web server part of this sketch. Mainly used for administration 
+	// Handle the Web server part of this sketch. Mainly used for administration
 	// and monitoring of the node. This function is important so it is called at the
 	// start of the loop() function.
 	server.handleClient();
@@ -805,7 +805,7 @@ void loop ()
 
 	// stat PUSH_DATA message (*2, par. 4)
 	// Down send to server
-	//	
+	//
     if ((nowSeconds - statTime) >= _STAT_INTERVAL) {		// Wake up every xx seconds
 		yield();											// on 26/12/2017
         sendStat();											// Show the status message and send to server
@@ -855,7 +855,7 @@ void loop ()
 		yield();
         pullData();											// Send PULL_DATA message to server
 		pullTime = nowSeconds;
-		
+
 #		if _MONITOR>=1
 		if ((debug>=3) && (pdebug & P_RX)) {
 			String response = "^ PULL_DATA:: ESP-sc-gway: message micr=";
@@ -875,7 +875,7 @@ void loop ()
 		yield();
 		startReceiver();
 		rstTime = nowSeconds;
-		
+
 #		if _MONITOR>=1
 		if ((debug>=2) && (pdebug & P_MAIN)) {
 			String response = "^ ESP-sc-gway:: RST_DATA message sent: micr=";
@@ -885,7 +885,7 @@ void loop ()
 #		endif //_MONITOR
     }
 
-	
+
 	// If we do our own NTP handling (advisable)
 	// We do not use the timer interrupt but use the timing
 	// of the loop() itself which is better for SPI

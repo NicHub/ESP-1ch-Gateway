@@ -52,9 +52,9 @@ struct Settings {
 
 
 void setup() {
-    WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP    
+    WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
     pinMode(SETUP_PIN, INPUT_PULLUP);
-    Serial.begin(115200); 
+    Serial.begin(BAUD_RATE);
 
     //Delay to push SETUP button
     Serial.println("Press setup button");
@@ -67,13 +67,13 @@ void setup() {
     EEPROM.begin( 512 );
     EEPROM.get(0, sett);
     Serial.println("Settings loaded");
-    
-    if (digitalRead(SETUP_PIN) == LOW) {  
-        // Button pressed 
+
+    if (digitalRead(SETUP_PIN) == LOW) {
+        // Button pressed
         Serial.println("SETUP");
 
         WiFiManager wm;
-        
+
         sett.s[19] = '\0';   //add null terminator at the end cause overflow
         WiFiManagerParameter param_str( "str", "param_string",  sett.s, 20);
         FloatParameter param_float( "float", "param_float",  sett.f);
@@ -91,7 +91,7 @@ void setup() {
         wm.startConfigPortal();
 
         strncpy(sett.s, param_str.getValue(), 20);
-        sett.s[19] = '\0'; 
+        sett.s[19] = '\0';
         sett.f = param_float.getValue();
         sett.i = param_int.getValue();
 
@@ -101,7 +101,7 @@ void setup() {
         Serial.println(sett.f);
         Serial.print("Int param: ");
         Serial.println(sett.i, DEC);
-        
+
         if (param_ip.getValue(ip)) {
             sett.ip = ip;
 
@@ -117,12 +117,12 @@ void setup() {
         } else {
             Serial.println("EEPROM error");
         }
-    } 
-    else {  
+    }
+    else {
         Serial.println("WORK");
 
         //connect to saved SSID
-        WiFi.begin();  
+        WiFi.begin();
 
         //do smth
         Serial.print("String param: ");

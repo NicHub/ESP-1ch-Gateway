@@ -1,5 +1,5 @@
 // 1-channel LoRa Gateway for ESP32 and ESP8266
-// Copyright (c) Maarten Westenberg 2016-2021 
+// Copyright (c) Maarten Westenberg 2016-2021
 
 #define VERSION "V.6.2.8.EU868; PlatformIO 211015 a; distri GIT"
 
@@ -19,16 +19,16 @@
 // The disadvantage of compile time is minor compared to the memory gain of not having
 // too much code compiled and loaded on your ESP device.
 //
-// NOTE: 
-// If version is for ESP32 Heltec board, compile with ESP32 setting and board 
+// NOTE:
+// If version is for ESP32 Heltec board, compile with ESP32 setting and board
 // "ESP32 Dev Module" or "Heltec WiFi Lora 32"
-// 
+//
 // For ESP8266 Wemos: compile with "Wemos R1 D1" and choose
-// the right _PIN_OUT below. Selecting Oled while that is not connected does not 
+// the right _PIN_OUT below. Selecting Oled while that is not connected does not
 // really matter (so you can leave that in).
 //
 // The source has been optimized for PlatformIO usage. That means some variables
-// can be defined in the .platformio.ini file. Please look at the example file to see 
+// can be defined in the .platformio.ini file. Please look at the example file to see
 // how to set these #defines
 //
 // ========================================================================================
@@ -43,8 +43,8 @@
 #endif
 
 
-// Allows configuration through WifiManager AP setup. Must be 0 or 1	
-#if !defined _WIFIMANAGER				
+// Allows configuration through WifiManager AP setup. Must be 0 or 1
+#if !defined _WIFIMANAGER
 #	define _WIFIMANAGER 0
 #endif
 
@@ -76,7 +76,7 @@
 #endif
 
 // Define the frequency band the gateway will listen on. Valid options are
-// EU863_870	Europe 
+// EU863_870	Europe
 // US902_928	North America
 // AU925_928	Australia
 // CN470_510	China
@@ -85,10 +85,10 @@
 // EU433		Europe
 // KR920    	South Korea
 // AS923		(Not Used)
-// You can find the definitions in "loraModem.h" and frequencies in
+// You can find the definitions in "loraModem.h" and frequencFies in
 // See https://www.thethingsnetwork.org/docs/lorawan/frequency-plans.html
-#define EU863_870 1
- 
+#define EU433 1
+
 
 // Define the CLASS mode of the gateway
 // A: Baseline Class
@@ -121,19 +121,19 @@
 #endif
 
 // Channel Activity Detection
-// This function will scan for valid LoRa headers and determine the Spreading 
-// factor accordingly. If set to 1 we will use this function which means the 
+// This function will scan for valid LoRa headers and determine the Spreading
+// factor accordingly. If set to 1 we will use this function which means the
 // 1-channel gateway will become even more versatile. If set to 0 we will use the
 // continuous listen mode.
 // Using this function means that we HAVE to use more dio pins on the RFM95/sx1276
-// device and also connect enable dio1 to detect this state. 
+// device and also connect enable dio1 to detect this state.
 #define _CAD 1
 
 
 // CRCCHECK
 // Defines whether we should check on the CRC of RXDONE messages (see stateMachine.ino)
 // This should prevent us from getting a lot os stranges messgages of unknown nodes.
-// Note: DIO3 must be connected for this to work (Heltec and later Wemos gateways). 
+// Note: DIO3 must be connected for this to work (Heltec and later Wemos gateways).
 #define _CRCCHECK 1
 
 
@@ -148,15 +148,15 @@
 
 // Definitions for over the air updates. At the moment we support OTA with IDE
 // Make sure that tou have installed Python version 2.7 and have Bonjour in your network.
-// Bonjour is included in iTunes (which is free) and OTA is recommended to install 
-// the firmware on your router witout having to be really close to the gateway and 
+// Bonjour is included in iTunes (which is free) and OTA is recommended to install
+// the firmware on your router witout having to be really close to the gateway and
 // connect with USB.
 #if !defined _OTA
 #	define _OTA 1
 #endif
 
 
-// We support a few pin-out configurations out-of-the-box: HALLARD, COMPRESULT and 
+// We support a few pin-out configurations out-of-the-box: HALLARD, COMPRESULT and
 // Heltec/TTGO ESP32.
 // If you use one of these, just set the parameter to the right value.
 // If your pin definitions are different, update the loraModem.h file to reflect the
@@ -171,9 +171,9 @@
 #endif
 
 
-// Single channel gateways if they behave strict should only use one frequency 
-// channel and one, or in case _CAD all, spreading factors. 
-// The TTN backend replies on RX1 timeslot for spreading factors SF9-SF12. 
+// Single channel gateways if they behave strict should only use one frequency
+// channel and one, or in case _CAD all, spreading factors.
+// The TTN backend replies on RX1 timeslot for spreading factors SF9-SF12.
 // If the 1ch gateway is working in and for nodes that ONLY transmit and receive on the set
 // and agreed frequency and spreading factor. make sure to set STRICT to 1.
 // In this case, the frequency and spreading factor for downlink messages is adapted by this
@@ -204,7 +204,7 @@
 
 
 // This section defines whether we use the gateway as a repeater
-// For his, we use another output channel as the channel (default==0) we are 
+// For his, we use another output channel as the channel (default==0) we are
 // receiving the messages on.
 #if !defined _REPEATER
 #	define _REPEATER 0
@@ -222,14 +222,14 @@
 #endif
 
 
-// Define whether we want to manage the gateway over UDP (next to management 
+// Define whether we want to manage the gateway over UDP (next to management
 // thru webinterface).
-// This will allow us to send messages over the UDP connection to manage the gateway 
-// and its parameters. Sometimes the gateway is not accesible from remote, 
-// in this case we would allow it to use the SERVER UDP connection to receive 
+// This will allow us to send messages over the UDP connection to manage the gateway
+// and its parameters. Sometimes the gateway is not accesible from remote,
+// in this case we would allow it to use the SERVER UDP connection to receive
 // messages as well.
 // NOTE: Be aware that these messages are NOT LoRa and NOT LoRa Gateway spec compliant.
-//	However that should not interfere with regular gateway operation but instead offer 
+//	However that should not interfere with regular gateway operation but instead offer
 //	functions to set/reset certain parameters from remote.
 #define _GATEWAYMGT 0
 
@@ -252,7 +252,7 @@
 #define _LOCUDPPORT 1700					// UDP port of gateway! Often 1700 or 1701 is used for upstream comms
 
 
-// This defines whether or not we would use the gateway as 
+// This defines whether or not we would use the gateway as
 // as sort of backend decoding system for local sensors which decodes (such as TTGO T-Beam)
 // 0: Do not use _LOCALSERVER
 // 1: _LOCALSERVER is used for received messages
@@ -271,7 +271,7 @@
 
 
 // lora sensor code definitions
-// Defines whether the gateway will also report sensor/status value on MQTT 
+// Defines whether the gateway will also report sensor/status value on MQTT
 // (such as battery and GPS)
 // after all, a gateway can be a node to the system as well. Some sensors like GPS can be
 // sent to the backend as a parameter, some (like humidity for example) can only be sent
@@ -295,18 +295,18 @@
 
 // ========================================================================
 // DO NOT CHANGE BELOW THIS LINE
-// Probably do not change items below this line, only if lists or 
+// Probably do not change items below this line, only if lists or
 // configurations on configNode.h are not large enough for example.
 // ========================================================================
 
 
 // Name of he configfile in SPIFFs	filesystem
 // In this file we store the configuration and other relevant info that should
-// survive a reboot of the gateway		
+// survive a reboot of the gateway
 #define _CONFIGFILE "/gwayConfig.txt"
 
 
-// Maximum number of Message History statistics records gathered. 20 is a good maximum 
+// Maximum number of Message History statistics records gathered. 20 is a good maximum
 // (memory intensive). For ESP32 maybe 30 could be used as well
 #if !defined _MAXSTAT
 #	define _MAXSTAT 30
@@ -343,12 +343,12 @@
 
 
 // Define the correct radio type that you are using
-#define CFG_sx1276_radio		
+#define CFG_sx1276_radio
 //#define CFG_sx1272_radio
 
 
 // Serial Port speed
-#define _BAUDRATE 115200						// Works for debug messages to serial momitor
+#define _BAUDRATE BAUD_RATE						// Works for debug messages to serial momitor
 
 
 // Will we use Mutex or not?
@@ -376,6 +376,6 @@
 //#	define _TTNSERVER "router.eu.thethings.network"
 //
 // TTN Version 3:
-#	define _TTNSERVER "eu1.cloud.thethings.network"	
+#	define _TTNSERVER "eu1.cloud.thethings.network"
 #	define _TTNPORT 1700							// Standard port for TTN
 #endif

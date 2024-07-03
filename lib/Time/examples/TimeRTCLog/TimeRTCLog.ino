@@ -16,7 +16,7 @@ boolean state[nbrInputPins] ;            // the state of the monitored pins
 time_t  prevEventTime[nbrInputPins] ;    // the time of the previous event
 
 void setup()  {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   setSyncProvider(RTC.get);   // the function to sync the time from the RTC
   for (int i=0; i < nbrInputPins; i++) {
      pinMode( inputPins[i], INPUT);

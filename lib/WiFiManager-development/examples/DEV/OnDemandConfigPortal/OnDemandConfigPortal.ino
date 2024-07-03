@@ -1,7 +1,7 @@
 /**
  * This is a kind of unit test for DEV for now
  * It contains many of the public methods
- * 
+ *
  */
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
 #include <time.h>
@@ -24,7 +24,7 @@ unsigned long mtime = 0;
 // #include <Wire.h>
 // #include <Adafruit_GFX.h>
 // #include <Adafruit_SSD1306.h>
-// #ifdef MYOLED 
+// #ifdef MYOLED
 
 // #define SCREEN_WIDTH 128 // OLED display width, in pixels
 // #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -85,9 +85,9 @@ void saveWifiCallback(){
 void configModeCallback (WiFiManager *myWiFiManager) {
   Serial.println("[CALLBACK] configModeCallback fired");
   #ifdef ESP8266
-    print_oled("WiFiManager Waiting\nIP: " + WiFi.softAPIP().toString() + "\nSSID: " + WiFi.softAPSSID(),1); 
-  #endif  
-  // myWiFiManager->setAPStaticIPConfig(IPAddress(10,0,1,1), IPAddress(10,0,1,1), IPAddress(255,255,255,0)); 
+    print_oled("WiFiManager Waiting\nIP: " + WiFi.softAPIP().toString() + "\nSSID: " + WiFi.softAPSSID(),1);
+  #endif
+  // myWiFiManager->setAPStaticIPConfig(IPAddress(10,0,1,1), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
   // Serial.println(WiFi.softAPIP());
   //if you used auto generated SSID, print it
   // Serial.println(myWiFiManager->getConfigPortalSSID());
@@ -111,16 +111,16 @@ void handleRoute(){
 void setup() {
   WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // put your setup code here, to run once:
-  Serial.begin(115200);
-  // Serial1.begin(115200);
+  Serial.begin(BAUD_RATE);
+  // Serial1.begin(BAUD_RATE);
 
-  // Serial.setDebugOutput(true);  
+  // Serial.setDebugOutput(true);
   delay(1000);
   // Serial1.println("TXD1 Enabled");
 
   Serial.println("\n Starting");
   // WiFi.setSleepMode(WIFI_NONE_SLEEP); // disable sleep, can improve ap stability
-  
+
   #ifdef OLED
   init_oled();
   #endif
@@ -131,7 +131,7 @@ void setup() {
   //reset settings - for testing
   // wm.resetSettings();
   // wm.erase();
-  
+
   wm.setClass("invert");
 
   WiFiManagerParameter custom_html("<p>This Is Custom HTML</p>"); // only custom html
@@ -141,7 +141,7 @@ void setup() {
   WiFiManagerParameter custom_tokenb("invalid token", "invalid token", "", 0); // id is invalid, cannot contain spaces
   WiFiManagerParameter custom_ipaddress("input_ip", "input IP", "", 15,"pattern='\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}'"); // custom input attrs (ip mask)
 
-  const char _customHtml_checkbox[] = "type=\"checkbox\""; 
+  const char _customHtml_checkbox[] = "type=\"checkbox\"";
   WiFiManagerParameter custom_checkbox("checkbox", "my checkbox", "T", 2, _customHtml_checkbox, WFM_LABEL_AFTER);
 
   // callbacks
@@ -168,7 +168,7 @@ void setup() {
 
   std::vector<const char *> menu = {"wifi","wifinoscan","info","param","close","sep","erase","restart","exit"};
   // wm.setMenu(menu); // custom menu, pass vector
-  
+
   wm.setParamsPage(true); // move params to seperate page, not wifi, do not combine with setmenu!
 
   // set static sta ip
@@ -178,14 +178,14 @@ void setup() {
 
   // set static ip
   // wm.setAPStaticIPConfig(IPAddress(10,0,1,1), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
-  // wm.setAPStaticIPConfig(IPAddress(10,0,1,99), IPAddress(10,0,1,1), IPAddress(255,255,255,0)); 
+  // wm.setAPStaticIPConfig(IPAddress(10,0,1,99), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
 
   // set country
   wm.setCountry("US"); // setting wifi country seems to improve OSX soft ap connectivity, may help others as well
-  
+
   // set channel
   // wm.setWiFiAPChannel(13);
-  
+
   // set AP hidden
   // wm.setAPHidden(true);
 
@@ -195,14 +195,14 @@ void setup() {
   //sets timeout until configuration portal gets turned off
   //useful to make it all retry or go to sleep in seconds
     wm.setConfigPortalTimeout(120);
-  
+
   // wm.setConnectTimeout(20);
   // wm.setShowStaticFields(true);
-  
+
   // wm.startConfigPortal("AutoConnectAP", "password");
-  
+
   // wm.setCleanConnect(true); // disconenct before connect, clean connect
-  
+
   // wm.setBreakAfterConfig(true);
 
   //fetches ssid and pass and tries to connect
@@ -210,7 +210,7 @@ void setup() {
   //here  "AutoConnectAP"
   //and goes into a blocking loop awaiting configuration
   wifiInfo();
-  print_oled(F("Connecting..."),2);  
+  print_oled(F("Connecting..."),2);
   if(!wm.autoConnect("WM_AutoConnectAP")) {
     Serial.println("failed to connect and hit timeout");
     print_oled("Not Connected",2);
@@ -225,9 +225,9 @@ void setup() {
   else {
     //if you get here you have connected to the WiFi
      Serial.println("connected...yeey :)");
-      print_oled("Connected\nIP: " + WiFi.localIP().toString() + "\nSSID: " + WiFi.SSID(),1);    
+      print_oled("Connected\nIP: " + WiFi.localIP().toString() + "\nSSID: " + WiFi.SSID(),1);
   }
-  
+
   wifiInfo();
   pinMode(TRIGGER_PIN, INPUT_PULLUP);
 
@@ -258,7 +258,7 @@ void loop() {
 
       // disable captive portal redirection
       // wm.setCaptivePortalEnable(false);
-      
+
       if (!wm.startConfigPortal("OnDemandAP","12345678")) {
         Serial.println("failed to connect and hit timeout");
         delay(3000);
@@ -267,7 +267,7 @@ void loop() {
     else {
       //if you get here you have connected to the WiFi
       Serial.println("connected...yeey :)");
-      print_oled("Connected\nIP: " + WiFi.localIP().toString() + "\nSSID: " + WiFi.SSID(),1);    
+      print_oled("Connected\nIP: " + WiFi.localIP().toString() + "\nSSID: " + WiFi.SSID(),1);
       getTime();
     }
   }
@@ -285,7 +285,7 @@ void getTime() {
   int dst          = 0;
   time_t now       = time(nullptr);
   unsigned timeout = 5000;
-  unsigned start   = millis();  
+  unsigned start   = millis();
   configTime(tz * 3600, dst * 3600, "pool.ntp.org", "time.nist.gov");
   Serial.print("Waiting for NTP time sync: ");
   while (now < 8 * 3600 * 2 ) {
@@ -308,7 +308,7 @@ void debugchipid(){
   // WiFi.mode(WIFI_STA);
   // WiFi.printDiag(Serial);
   // Serial.println(modes[WiFi.getMode()]);
-  
+
   // ESP.eraseConfig();
   // wm.resetSettings();
   // wm.erase(true);

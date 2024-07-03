@@ -1,4 +1,4 @@
-/* 
+/*
  * TimeSerialDateStrings.pde
  * example code illustrating Time library date strings
  *
@@ -12,9 +12,9 @@
  * A message starting with a format header sets the date format
 
  * send: Fs\n for short date format
- * send: Fl\n for long date format 
- */ 
- 
+ * send: Fl\n for long date format
+ */
+
 #include <TimeLib.h>
 
 // single character message tags
@@ -23,18 +23,18 @@
 #define FORMAT_SHORT  's'   // short month and day strings
 #define FORMAT_LONG   'l'   // (lower case l) long month and day strings
 
-#define TIME_REQUEST  7     // ASCII bell character requests a time sync message 
+#define TIME_REQUEST  7     // ASCII bell character requests a time sync message
 
 static boolean isLongFormat = true;
 
 void setup()  {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   while (!Serial) ; // Needed for Leonardo only
   setSyncProvider( requestSync);  //set function to call when sync required
   Serial.println("Waiting for sync message");
 }
 
-void loop(){    
+void loop(){
   if (Serial.available() > 1) { // wait for at least two characters
     char c = Serial.read();
     if( c == TIME_HEADER) {
@@ -45,7 +45,7 @@ void loop(){
     }
   }
   if (timeStatus()!= timeNotSet) {
-    digitalClockDisplay();  
+    digitalClockDisplay();
   }
   delay(1000);
 }
@@ -58,7 +58,7 @@ void digitalClockDisplay() {
   Serial.print(" ");
   if(isLongFormat)
     Serial.print(dayStr(weekday()));
-  else  
+  else
    Serial.print(dayShortStr(weekday()));
   Serial.print(" ");
   Serial.print(day());
@@ -68,8 +68,8 @@ void digitalClockDisplay() {
   else
      Serial.print(monthShortStr(month()));
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits) {
@@ -87,7 +87,7 @@ void  processFormatMessage() {
       Serial.println(F("Setting long format"));
    }
    else if( c == FORMAT_SHORT) {
-      isLongFormat = false;   
+      isLongFormat = false;
       Serial.println(F("Setting short format"));
    }
 }
@@ -103,6 +103,6 @@ void processSyncMessage() {
 }
 
 time_t requestSync() {
-  Serial.write(TIME_REQUEST);  
+  Serial.write(TIME_REQUEST);
   return 0; // the time will be sent later in response to serial mesg
 }

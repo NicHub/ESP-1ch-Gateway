@@ -1,7 +1,7 @@
 #include <Streaming.h>
 
 
-const long BAUD = 115200;
+const long BAUD = BAUD_RATE;
 
 const int lettera = 'A';
 const int month = 4, day = 17, year = 2009;

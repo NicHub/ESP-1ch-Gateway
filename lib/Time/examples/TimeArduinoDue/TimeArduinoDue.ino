@@ -2,7 +2,7 @@
  * TimeRTC.pde
  * example code illustrating Time library with Real Time Clock.
  *
- * This example requires Markus Lange's Arduino Due RTC Library 
+ * This example requires Markus Lange's Arduino Due RTC Library
  * https://github.com/MarkusLange/Arduino-Due-RTC-Library
  */
 
@@ -14,7 +14,7 @@
 RTC_clock rtc_clock(XTAL);
 
 void setup()  {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   rtc_clock.init();
   if (rtc_clock.date_already_set() == 0) {
     // Unfortunately, the Arduino Due hardware does not seem to
@@ -30,10 +30,10 @@ void setup()  {
     // with different reset circuitry than Arduino Due?
   }
   setSyncProvider(getArduinoDueTime);
-  if(timeStatus()!= timeSet) 
+  if(timeStatus()!= timeSet)
      Serial.println("Unable to sync with the RTC");
   else
-     Serial.println("RTC has set the system time");      
+     Serial.println("RTC has set the system time");
 }
 
 time_t getArduinoDueTime()
@@ -57,8 +57,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits){

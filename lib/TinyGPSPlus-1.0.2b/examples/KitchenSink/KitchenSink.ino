@@ -19,7 +19,7 @@ unsigned long last = 0UL;
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   ss.begin(GPSBaud);
 
   Serial.println(F("KitchenSink.ino"));
@@ -155,13 +155,13 @@ void loop()
         TinyGPSPlus::distanceBetween(
           gps.location.lat(),
           gps.location.lng(),
-          LONDON_LAT, 
+          LONDON_LAT,
           LONDON_LON);
       double courseToLondon =
         TinyGPSPlus::courseTo(
           gps.location.lat(),
           gps.location.lng(),
-          LONDON_LAT, 
+          LONDON_LAT,
           LONDON_LON);
 
       Serial.print(F("LONDON     Distance="));

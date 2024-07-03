@@ -2,7 +2,7 @@
  * OnDemandConfigPortal.ino
  * example of running the configPortal AP manually, independantly from the captiveportal
  * trigger pin will start a configPortal AP for 120 seconds then turn it off.
- * 
+ *
  */
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
 
@@ -12,9 +12,9 @@
 int timeout = 120; // seconds to run for
 
 void setup() {
-  WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP  
+  WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   Serial.println("\n Starting");
   pinMode(TRIGGER_PIN, INPUT_PULLUP);
 }
@@ -22,11 +22,11 @@ void setup() {
 void loop() {
   // is configuration portal requested?
   if ( digitalRead(TRIGGER_PIN) == LOW) {
-    WiFiManager wm;    
+    WiFiManager wm;
 
     //reset settings - for testing
     //wifiManager.resetSettings();
-  
+
     // set configportal timeout
     wm.setConfigPortalTimeout(timeout);
 

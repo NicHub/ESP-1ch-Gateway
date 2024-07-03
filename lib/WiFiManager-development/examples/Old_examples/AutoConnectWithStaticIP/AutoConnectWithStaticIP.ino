@@ -3,12 +3,12 @@
 
 /**************************************************************************************
  * this example shows how to set a static IP configuration for the ESP
- * although the IP shows in the config portal, the changes will revert 
+ * although the IP shows in the config portal, the changes will revert
  * to the IP set in the source file.
  * if you want the ability to configure and persist the new IP configuration
  * look at the FS examples, which save the config to file
  *************************************************************************************/
- 
+
 //default custom static IP
 //char static_ip[16] = "10.0.1.59";
 //char static_gw[16] = "10.0.1.1";
@@ -16,7 +16,7 @@
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   Serial.println();
 
   //WiFiManager
@@ -41,7 +41,7 @@ void setup() {
   IPAddress _gw = IPAddress(10, 0, 1, 1);
   IPAddress _sn = IPAddress(255, 255, 255, 0);
   //end-block2
-  
+
   wifiManager.setSTAStaticIPConfig(_ip, _gw, _sn);
 
 

@@ -4,13 +4,13 @@
  *
  * This sketch uses the Ethernet library
  */
- 
+
 #include <TimeLib.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 #include <SPI.h>
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; 
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 // NTP Servers:
 IPAddress timeServer(132, 163, 4, 101); // time-a.timefreq.bldrdoc.gov
 // IPAddress timeServer(132, 163, 4, 102); // time-b.timefreq.bldrdoc.gov
@@ -27,9 +27,9 @@ const int timeZone = 1;     // Central European Time
 EthernetUDP Udp;
 unsigned int localPort = 8888;  // local port to listen for UDP packets
 
-void setup() 
+void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   while (!Serial) ; // Needed for Leonardo only
   delay(250);
   Serial.println("TimeNTP Example");
@@ -50,11 +50,11 @@ void setup()
 time_t prevDisplay = 0; // when the digital clock was displayed
 
 void loop()
-{  
+{
   if (timeStatus() != timeNotSet) {
     if (now() != prevDisplay) { //update the display only if time has changed
       prevDisplay = now();
-      digitalClockDisplay();  
+      digitalClockDisplay();
     }
   }
 }
@@ -69,8 +69,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits){
@@ -127,7 +127,7 @@ void sendNTPpacket(IPAddress &address)
   packetBuffer[14]  = 49;
   packetBuffer[15]  = 52;
   // all NTP fields have been given values, now
-  // you can send a packet requesting a timestamp:                 
+  // you can send a packet requesting a timestamp:
   Udp.beginPacket(address, 123); //NTP requests are to port 123
   Udp.write(packetBuffer, NTP_PACKET_SIZE);
   Udp.endPacket();

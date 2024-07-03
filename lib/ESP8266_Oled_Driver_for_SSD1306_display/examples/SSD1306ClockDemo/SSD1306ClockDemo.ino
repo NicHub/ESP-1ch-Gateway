@@ -152,7 +152,7 @@ OverlayCallback overlays[] = { clockOverlay };
 int overlaysCount = 1;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   Serial.println();
 
 	// The ESP is capable of rendering 60fps in 80Mhz mode

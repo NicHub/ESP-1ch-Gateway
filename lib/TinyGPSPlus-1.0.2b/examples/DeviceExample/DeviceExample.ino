@@ -16,7 +16,7 @@ SoftwareSerial ss(RXPin, TXPin);
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   ss.begin(GPSBaud);
 
   Serial.println(F("DeviceExample.ino"));
@@ -42,7 +42,7 @@ void loop()
 
 void displayInfo()
 {
-  Serial.print(F("Location: ")); 
+  Serial.print(F("Location: "));
   if (gps.location.isValid())
   {
     Serial.print(gps.location.lat(), 6);

@@ -38,7 +38,7 @@ SSD1306Wire  display(0x3c, D3, D5);
 SSD1306Wire  display2(0x3c, D1, D2);
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   Serial.println();
   Serial.println();
 

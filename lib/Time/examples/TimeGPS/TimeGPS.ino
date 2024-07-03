@@ -1,7 +1,7 @@
 /*
  * TimeGPS.pde
  * example code illustrating time synced from a GPS
- * 
+ *
  */
 
 #include <TimeLib.h>
@@ -10,7 +10,7 @@
 // TinyGPS and SoftwareSerial libraries are the work of Mikal Hart
 
 SoftwareSerial SerialGPS = SoftwareSerial(10, 11);  // receive on pin 10
-TinyGPS gps; 
+TinyGPS gps;
 
 // To use a hardware serial port, which is far more efficient than
 // SoftwareSerial, uncomment this line and remove SoftwareSerial
@@ -33,7 +33,7 @@ time_t prevDisplay = 0; // when the digital clock was displayed
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   while (!Serial) ; // Needed for Leonardo only
   SerialGPS.begin(4800);
   Serial.println("Waiting for GPS time ... ");
@@ -58,7 +58,7 @@ void loop()
   if (timeStatus()!= timeNotSet) {
     if (now() != prevDisplay) { //update the display only if the time has changed
       prevDisplay = now();
-      digitalClockDisplay();  
+      digitalClockDisplay();
     }
   }
 }
@@ -73,8 +73,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits) {

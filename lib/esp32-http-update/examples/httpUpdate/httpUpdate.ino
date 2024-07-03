@@ -16,7 +16,7 @@
 
 void setup() {
 
-    USE_SERIAL.begin(115200);
+    USE_SERIAL.begin(BAUD_RATE);
     // USE_SERIAL.setDebugOutput(true);
 
     USE_SERIAL.println();

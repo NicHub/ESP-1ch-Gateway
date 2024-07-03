@@ -12,9 +12,9 @@ WiFiManager wm;
 bool portalRunning = false;
 
 void setup() {
-  WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP 
+  WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // put your setup code here, to run once
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   Serial.println("\n Starting");
   pinMode(TRIGGER_PIN, INPUT_PULLUP);
 }

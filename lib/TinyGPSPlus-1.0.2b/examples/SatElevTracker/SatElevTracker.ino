@@ -3,7 +3,7 @@
 /*
    This sample code tracks satellite elevations using TinyGPSCustom objects.
 
-   Satellite numbers and elevations are not normally tracked by TinyGPS++, but 
+   Satellite numbers and elevations are not normally tracked by TinyGPS++, but
    by using TinyGPSCustom we get around this.
 
    It requires the use of SoftwareSerial and assumes that you have a
@@ -35,7 +35,7 @@ struct
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   ss.begin(GPSBaud);
 
   Serial.println(F("SatElevTracker.ino"));
@@ -43,7 +43,7 @@ void setup()
   Serial.print(F("Testing TinyGPS++ library v. ")); Serial.println(TinyGPSPlus::libraryVersion());
   Serial.println(F("by Mikal Hart"));
   Serial.println();
-  
+
   // Initialize all the uninitialized TinyGPSCustom objects
   for (int i=0; i<4; ++i)
   {
@@ -58,7 +58,7 @@ void loop()
   if (ss.available() > 0)
   {
     gps.encode(ss.read());
-   
+
     if (totalGPGSVMessages.isUpdated())
     {
       for (int i=0; i<4; ++i)
@@ -75,7 +75,7 @@ void loop()
           }
         }
       }
-      
+
       int totalMessages = atoi(totalGPGSVMessages.value());
       int currentMessage = atoi(messageNumber.value());
       if (totalMessages == currentMessage && anyChanges)

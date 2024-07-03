@@ -1,34 +1,34 @@
-/* 
+/*
  * TimeSerial.pde
  * example code illustrating Time library set through serial port messages.
  *
  * Messages consist of the letter T followed by ten digit time (as seconds since Jan 1 1970)
  * you can send the text on the next line using Serial Monitor to set the clock to noon Jan 1 2013
- T1357041600  
+ T1357041600
  *
  * A Processing example sketch to automatically send the messages is included in the download
  * On Linux, you can use "date +T%s\n > /dev/ttyACM0" (UTC time zone)
- */ 
- 
+ */
+
 #include <TimeLib.h>
 
 #define TIME_HEADER  "T"   // Header tag for serial time sync message
-#define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
+#define TIME_REQUEST  7    // ASCII bell character requests a time sync message
 
 void setup()  {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   while (!Serial) ; // Needed for Leonardo only
   pinMode(13, OUTPUT);
   setSyncProvider( requestSync);  //set function to call when sync required
   Serial.println("Waiting for sync message");
 }
 
-void loop(){    
+void loop(){
   if (Serial.available()) {
     processSyncMessage();
   }
   if (timeStatus()!= timeNotSet) {
-    digitalClockDisplay();  
+    digitalClockDisplay();
   }
   if (timeStatus() == timeSet) {
     digitalWrite(13, HIGH); // LED on if synced
@@ -48,8 +48,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits){
@@ -75,7 +75,7 @@ void processSyncMessage() {
 
 time_t requestSync()
 {
-  Serial.write(TIME_REQUEST);  
+  Serial.write(TIME_REQUEST);
   return 0; // the time will be sent later in response to serial mesg
 }
 

@@ -22,13 +22,13 @@ TinyGPSPlus gps;
 // The serial connection to the GPS device
 SoftwareSerial ss(RXPin, TXPin);
 
-/* 
+/*
   From http://aprs.gids.nl/nmea/:
-   
+
   $GPGSV
-  
+
   GPS Satellites in view
-  
+
   eg. $GPGSV,3,1,11,03,03,111,00,04,15,270,00,06,01,010,00,13,06,292,00*74
       $GPGSV,3,2,11,14,25,170,00,16,57,208,39,18,67,296,40,19,40,246,00*74
       $GPGSV,3,3,11,22,42,067,42,24,14,311,43,27,05,244,00,,,,*4D
@@ -65,7 +65,7 @@ struct
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   ss.begin(GPSBaud);
 
   Serial.println(F("SatelliteTracker.ino"));
@@ -73,7 +73,7 @@ void setup()
   Serial.print(F("Testing TinyGPS++ library v. ")); Serial.println(TinyGPSPlus::libraryVersion());
   Serial.println(F("by Mikal Hart"));
   Serial.println();
-  
+
   // Initialize all the uninitialized TinyGPSCustom objects
   for (int i=0; i<4; ++i)
   {
@@ -104,7 +104,7 @@ void loop()
           sats[no-1].active = true;
         }
       }
-      
+
       int totalMessages = atoi(totalGPGSVMessages.value());
       int currentMessage = atoi(messageNumber.value());
       if (totalMessages == currentMessage)
@@ -131,7 +131,7 @@ void loop()
             Serial.print(sats[i].azimuth);
             Serial.print(F(" "));
           }
-        
+
         Serial.print(F(" SNR="));
         for (int i=0; i<MAX_SATELLITES; ++i)
           if (sats[i].active)

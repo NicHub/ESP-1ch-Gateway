@@ -3,10 +3,10 @@ WiFiManager wm;
 WiFiManagerParameter custom_mqtt_server("server", "mqtt server", "", 40);
 
 void setup() {
-    WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP    
+    WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
     // put your setup code here, to run once:
-    Serial.begin(115200);
-    
+    Serial.begin(BAUD_RATE);
+
     //reset settings - wipe credentials for testing
     //wm.resetSettings();
     wm.addParameter(&custom_mqtt_server);

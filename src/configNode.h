@@ -79,25 +79,26 @@ codex decodes[] = {
 	{	0x00000000 , "lora-00",	// F=0
 		{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 		{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-	}			
+	}
 };
 #endif //_LOCALSERVER
 
 
 // Wifi definitions
 // WPA is an array with SSID and password records. Set WPA size to number of entries in array
-// When using the WiFiManager, we will overwrite the first entry with the 
+// When using the WiFiManager, we will overwrite the first entry with the
 // accesspoint we last connected to with WifiManager
 struct wpas {
 	char login[32];							// Maximum Buffer Size (and allocated memory)
 	char passw[64];
 };
 
-
+#include <WifiSettings.h>
 // Please fill in at least ONE valid SSID and password from your own WiFI network
 // below. This is needed to get the gateway working
 //
 wpas wpa[] = {
+    {  ____ssid,  ____password }
 };
 
 
@@ -112,7 +113,7 @@ wpas wpa[] = {
 
 
 // Define the name of the accesspoint if the gateway is in accesspoint mode (is
-// getting WiFi SSID and password using WiFiManager). 
+// getting WiFi SSID and password using WiFiManager).
 // If you do not need them, comment out.
 //#define AP_NAME ""
 //#define AP_PASSWD ""

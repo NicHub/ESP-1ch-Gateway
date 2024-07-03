@@ -24,7 +24,7 @@ EthernetServer server(80);
 
 void setup() {
   // Initialize serial port
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   while (!Serial) continue;
 
   // Initialize Ethernet libary

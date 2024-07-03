@@ -7,11 +7,11 @@
  * This sketch uses the EtherCard library:
  * http://jeelabs.org/pub/docs/ethercard/
  */
- 
+
 #include <TimeLib.h>
 #include <EtherCard.h>
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; 
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 // NTP Server
 const char timeServer[] PROGMEM = "pool.ntp.org";
@@ -28,16 +28,16 @@ byte Ethernet::buffer[BUFFER_SIZE];
 
 const unsigned int remotePort = 123;
 
-void setup() 
+void setup()
 {
-  Serial.begin(9600);
-  
+  Serial.begin(BAUD_RATE);
+
   while (!Serial)    // Needed for Leonardo only
     ;
   delay(250);
-  
+
   Serial.println("TimeNTP_ENC28J60 Example");
-  
+
   if (ether.begin(BUFFER_SIZE, mac) == 0) {
      // no point in carrying on, so do nothing forevermore:
     while (1) {
@@ -45,7 +45,7 @@ void setup()
       delay(10000);
     }
   }
-  
+
   if (!ether.dhcpSetup()) {
     // no point in carrying on, so do nothing forevermore:
     while (1) {
@@ -68,7 +68,7 @@ void loop()
   if (timeStatus() != timeNotSet) {
     if (now() != prevDisplay) { //update the display only if time has changed
       prevDisplay = now();
-      digitalClockDisplay();  
+      digitalClockDisplay();
     }
   }
 }
@@ -83,8 +83,8 @@ void digitalClockDisplay(){
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 void printDigits(int digits){
@@ -108,7 +108,7 @@ time_t getNtpTime()
   } else {
     //ether.printIp("SRV: ", ether.hisip);
     ether.ntpRequest(ether.hisip, remotePort);
-  
+
     // Wait for reply
     uint32_t beginWait = millis();
     while (millis() - beginWait < 1500) {
@@ -121,7 +121,7 @@ time_t getNtpTime()
         return secsSince1900 - 2208988800UL;
       }
     }
-    
+
     Serial.println("No NTP Response :-(");
     return 0;
   }
@@ -145,7 +145,7 @@ time_t getDstCorrectedTime (void) {
 /* This function returns the DST offset for the current UTC time.
  * This is valid for the EU, for other places see
  * http://www.webexhibits.org/daylightsaving/i.html
- * 
+ *
  * Results have been checked for 2012-2030 (but should work since
  * 1996 to 2099) against the following references:
  * - http://www.uniquevisitor.it/magazine/ora-legale-italia.php

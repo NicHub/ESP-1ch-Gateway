@@ -1,7 +1,7 @@
 /*
  * TimeRTC.pde
  * example code illustrating Time library with Real Time Clock.
- * 
+ *
  */
 
 #include <TimeLib.h>
@@ -10,7 +10,7 @@ void setup()  {
   // set the Time library to use Teensy 3.0's RTC to keep time
   setSyncProvider(getTeensy3Time);
 
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   while (!Serial);  // Wait for Arduino Serial Monitor to open
   delay(100);
   if (timeStatus()!= timeSet) {
@@ -28,7 +28,7 @@ void loop() {
       setTime(t);
     }
   }
-  digitalClockDisplay();  
+  digitalClockDisplay();
   delay(1000);
 }
 
@@ -42,8 +42,8 @@ void digitalClockDisplay() {
   Serial.print(" ");
   Serial.print(month());
   Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
+  Serial.print(year());
+  Serial.println();
 }
 
 time_t getTeensy3Time()
@@ -56,7 +56,7 @@ time_t getTeensy3Time()
 
 unsigned long processSyncMessage() {
   unsigned long pctime = 0L;
-  const unsigned long DEFAULT_TIME = 1357041600; // Jan 1 2013 
+  const unsigned long DEFAULT_TIME = 1357041600; // Jan 1 2013
 
   if(Serial.find(TIME_HEADER)) {
      pctime = Serial.parseInt();

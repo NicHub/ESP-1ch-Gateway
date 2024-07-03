@@ -9,8 +9,8 @@ void configModeCallback (WiFiManager *myWiFiManager) {
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
-  
+  Serial.begin(BAUD_RATE);
+
   //WiFiManager
   //Local intialization. Once its business is done, there is no need to keep it around
   WiFiManager wifiManager;
@@ -29,11 +29,11 @@ void setup() {
     //reset and try again, or maybe put it to deep sleep
     ESP.restart();
     delay(1000);
-  } 
+  }
 
   //if you get here you have connected to the WiFi
   Serial.println("connected...yeey :)");
- 
+
 }
 
 void loop() {

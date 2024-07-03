@@ -17,9 +17,9 @@ bool portalRunning      = false;
 bool startAP            = false; // start AP and webserver if true, else start only webserver
 
 void setup() {
-  WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP  
+  WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // put your setup code here, to run once
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   Serial.println("\n Starting");
   pinMode(TRIGGER_PIN, INPUT_PULLUP);
 }
@@ -38,10 +38,10 @@ void doWiFiManager(){
       portalRunning = false;
       if(startAP){
         wm.stopConfigPortal();
-      }  
+      }
       else{
         wm.stopWebPortal();
-      } 
+      }
    }
   }
 
@@ -51,11 +51,11 @@ void doWiFiManager(){
       Serial.println("Button Pressed, Starting Config Portal");
       wm.setConfigPortalBlocking(false);
       wm.startConfigPortal();
-    }  
+    }
     else{
       Serial.println("Button Pressed, Starting Web Portal");
       wm.startWebPortal();
-    }  
+    }
     portalRunning = true;
     startTime = millis();
   }
