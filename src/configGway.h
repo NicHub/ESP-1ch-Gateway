@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 // 1-channel LoRa Gateway for ESP32 and ESP8266
 // Copyright (c) Maarten Westenberg 2016-2021
 
